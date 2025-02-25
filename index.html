@@ -597,6 +597,8 @@
     </div>
     <div class="test">
         <h1>CODE BY CƯỜNG ĐẸP CHAI</h1>
+        <h1>Push Notifications with Nuxt 3</h1>
+        <button id="noti">Enable Notifications</button>
     </div>
 
     <div class="to">
@@ -627,5 +629,40 @@
   defer>
 </script>
     <script src="./accset/main.js"></script>
+    const showNotification = async () => {
+      // Kiểm tra xem trình duyệt có hỗ trợ Notification không
+      if (!('Notification' in window)) {
+        alert('Trình duyệt không hỗ trợ thông báo!')
+        return
+      }
+    
+      // Kiểm tra quyền thông báo
+      if (Notification.permission === 'granted') {
+        // Nếu đã được cấp quyền, hiển thị thông báo ngay
+        createNotification()
+      } else if (Notification.permission !== 'denied') {
+        // Nếu chưa được cấp quyền, yêu cầu người dùng cho phép
+        const permission = await Notification.requestPermission()
+        if (permission === 'granted') {
+          createNotification()
+        } else {
+          console.log('Người dùng từ chối cấp quyền thông báo')
+        }
+      }
+    }
+    
+    // Hàm tạo thông báo
+    const createNotification = () => {
+      new Notification('Xin chào từ Nuxt 3!', {
+        body: 'Đây là một thông báo thử nghiệm.',
+        icon: '/icon.png', // Tùy chọn: thêm biểu tượng trong thư mục /public
+      })
+    }
+
+    const notibtn = document.getElementById("noti");
+    if (notibtn) {
+      notibtn.addEventListener("click", showNotification);
+    }
+
 </body>
 </html>
